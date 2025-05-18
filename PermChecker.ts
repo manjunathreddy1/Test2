@@ -33,7 +33,7 @@ export async function isCurrentUserMemberOfSharePointGroup(
     const memberships = await getAllTransitiveGroups(graphClient, me.id);
 
     const aadGroupsInSharePointGroup = groupUsers.filter(u =>
-      u.PrincipalType === 8 // 8 = Security group/AAD group
+      u.PrincipalType === 4 // 8 = Security group/AAD group
     );
 
     const isInNestedGroup = memberships.some((membership: any) =>
@@ -52,7 +52,7 @@ export async function isCurrentUserMemberOfSharePointGroup(
 // Helper function to handle pagination
 async function getAllTransitiveGroups(graphClient: MSGraphClientV3, userId: string): Promise<any[]> {
   const allGroups: any[] = [];
-  let nextUrl: string | null = `/users/${userId}/transitiveMemberOf?$select=id,displayName&$top=100`;
+  let nextUrl: string | null = `/users/${userId}/transitiveMemberOf?$select=id,displayName&$top=3`;
 
   while (nextUrl) {
     const response: GraphPagedResponse<any> = await graphClient.api(nextUrl).get();
