@@ -1,69 +1,59 @@
 import * as React from 'react';
-import { ContextualMenu, ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
-import { spfi, SPFI } from '@pnp/sp';
-import { SPFx } from '@pnp/sp/presets/all'; // or '@pnp/sp' in non-SPFx apps
-import { Web } from '@pnp/sp/webs';
+import {
+  ContextualMenuItemType,
+  IContextualMenuProps,
+  IContextualMenuItem,
+} from '@fluentui/react/lib/ContextualMenu';
+import { DefaultButton } from '@fluentui/react/lib/Button';
 
-export const ContextualMenuBasicExample: React.FunctionComponent = () => {
-  const linkRef = React.useRef(null);
-  const [showContextualMenu, setShowContextualMenu] = React.useState(false);
-  const [menuItems, setMenuItems] = React.useState<IContextualMenuItem[]>([]);
-
-  // Replace with your actual SPFx context if you're using SPFx
-  const sp = React.useMemo(() => spfi().using(SPFx(/* your SPFx context */)), []);
+export const ContextualMenuDefaultExample: React.FunctionComponent = () => {
+  const [menuProps, setMenuProps] = React.useState<IContextualMenuProps>({
+    shouldFocusOnMount: true,
+    items: [],
+  });
 
   React.useEffect(() => {
-    const fetchPermissionsAndSetMenu = async () => {
-      const web = Web(sp.web.toUrl());
+    const loadMenuItems = async () => {
+      // Simulate SharePoint permission check here
+      const hasEditPermission = true; // replace this with actual logic
 
-      // Replace with appropriate permission check
-      const currentUserHasEdit = await web.currentUserHasPermissions('AddListItems');
+      const dynamicItems: IContextualMenuItem[] = [
+        { key: 'newItem', text: 'New', onClick: () => console.log('New clicked') },
+        { key: 'divider_1', itemType: ContextualMenuItemType.Divider },
+        { key: 'rename', text: 'Rename', onClick: () => console.log('Rename clicked') },
+        { key: 'properties', text: 'Properties', onClick: () => console.log('Properties clicked') },
+        { key: 'linkNoTarget', text: 'Link same window', href: 'http://bing.com' },
+        { key: 'linkWithTarget', text: 'Link new window', href: 'http://bing.com', target: '_blank' },
+        {
+          key: 'linkWithOnClick',
+          name: 'Link click',
+          href: 'http://bing.com',
+          onClick: (ev: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
+            alert('Link clicked');
+            ev.preventDefault();
+          },
+          target: '_blank',
+        },
+        {
+          key: 'disabled',
+          text: 'Disabled item',
+          disabled: true,
+          onClick: () => console.error('Disabled item should not be clickable.'),
+        },
+      ];
 
-      const items: IContextualMenuItem[] = [];
-
-      if (currentUserHasEdit) {
-        items.push({
-          key: 'edit',
-          text: 'Edit',
-          onClick: () => console.log('Edit clicked'),
-        });
+      if (hasEditPermission) {
+        dynamicItems.splice(3, 0, { key: 'edit', text: 'Edit', onClick: () => console.log('Edit clicked') });
       }
 
-      items.push({
-        key: 'view',
-        text: 'View',
-        onClick: () => console.log('View clicked'),
+      setMenuProps({
+        shouldFocusOnMount: true,
+        items: dynamicItems,
       });
-
-      setMenuItems(items);
     };
 
-    fetchPermissionsAndSetMenu().catch(console.error);
-  }, [sp]);
-
-  const onShowContextualMenu = React.useCallback((ev: React.MouseEvent<HTMLElement>) => {
-    ev.preventDefault();
-    setShowContextualMenu(true);
+    loadMenuItems().catch(console.error);
   }, []);
 
-  const onHideContextualMenu = React.useCallback(() => setShowContextualMenu(false), []);
-
-  return (
-    <div>
-      <p>
-        <b>
-          <a ref={linkRef} onClick={onShowContextualMenu} href="#">
-            Click for ContextualMenu
-          </a>
-        </b>
-      </p>
-      <ContextualMenu
-        items={menuItems}
-        hidden={!showContextualMenu}
-        target={linkRef}
-        onItemClick={onHideContextualMenu}
-        onDismiss={onHideContextualMenu}
-      />
-    </div>
-  );
+  return <DefaultButton text="Click for ContextualMenu" menuProps={menuProps} />;
 };
