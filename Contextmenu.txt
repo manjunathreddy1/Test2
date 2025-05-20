@@ -1,0 +1,69 @@
+import * as React from 'react';
+import { ContextualMenu, ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react/lib/ContextualMenu';
+import { spfi, SPFI } from '@pnp/sp';
+import { SPFx } from '@pnp/sp/presets/all'; // or '@pnp/sp' in non-SPFx apps
+import { Web } from '@pnp/sp/webs';
+
+export const ContextualMenuBasicExample: React.FunctionComponent = () => {
+  const linkRef = React.useRef(null);
+  const [showContextualMenu, setShowContextualMenu] = React.useState(false);
+  const [menuItems, setMenuItems] = React.useState<IContextualMenuItem[]>([]);
+
+  // Replace with your actual SPFx context if you're using SPFx
+  const sp = React.useMemo(() => spfi().using(SPFx(/* your SPFx context */)), []);
+
+  React.useEffect(() => {
+    const fetchPermissionsAndSetMenu = async () => {
+      const web = Web(sp.web.toUrl());
+
+      // Replace with appropriate permission check
+      const currentUserHasEdit = await web.currentUserHasPermissions('AddListItems');
+
+      const items: IContextualMenuItem[] = [];
+
+      if (currentUserHasEdit) {
+        items.push({
+          key: 'edit',
+          text: 'Edit',
+          onClick: () => console.log('Edit clicked'),
+        });
+      }
+
+      items.push({
+        key: 'view',
+        text: 'View',
+        onClick: () => console.log('View clicked'),
+      });
+
+      setMenuItems(items);
+    };
+
+    fetchPermissionsAndSetMenu().catch(console.error);
+  }, [sp]);
+
+  const onShowContextualMenu = React.useCallback((ev: React.MouseEvent<HTMLElement>) => {
+    ev.preventDefault();
+    setShowContextualMenu(true);
+  }, []);
+
+  const onHideContextualMenu = React.useCallback(() => setShowContextualMenu(false), []);
+
+  return (
+    <div>
+      <p>
+        <b>
+          <a ref={linkRef} onClick={onShowContextualMenu} href="#">
+            Click for ContextualMenu
+          </a>
+        </b>
+      </p>
+      <ContextualMenu
+        items={menuItems}
+        hidden={!showContextualMenu}
+        target={linkRef}
+        onItemClick={onHideContextualMenu}
+        onDismiss={onHideContextualMenu}
+      />
+    </div>
+  );
+};
