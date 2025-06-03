@@ -1,8 +1,8 @@
-  const item = await sp.web.lists.getByTitle("Site Pages").items.getById(pageItemId).select("Title", "FileRef")();
+ const currentUser = await sp.web.currentUser();
 
-    const pageTitle = item.Title;
-    const serverRelativeUrl = item.FileRef;
-    const absoluteUrl = `${context.pageContext.site.absoluteUrl}${serverRelativeUrl.replace(context.pageContext.web.serverRelativeUrl, '')}`;
-
-    console.log("Page Title:", pageTitle);
-    console.log("Full URL:", absoluteUrl);
+    // Update the item
+    await sp.web.lists.getByTitle(listTitle).items.getById(itemId).update({
+      "Approval Status": "Approved",
+      "Approved ById": currentUser.Id, // use internal name + 'Id' for people field
+      "Approved Date": new Date().toISOString(),
+    });
