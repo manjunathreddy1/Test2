@@ -1,0 +1,26 @@
+<pnp:TermGroups xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
+  <pnp:TermGroup Name="AN Test3" ID="11fd7b45-d559-4533-98ab-8ce1897c0363" Description=""
+    UpdateBehavior="Overwrite">
+    <pnp:TermSets>
+      <pnp:TermSet Name="Business Area" ID="03aeda29-fb28-4bb4-8f5d-1e029e0f6913" Description="">
+        <pnp:Terms>
+          <pnp:Term Name="Communications" ID="ce64f6bc-a317-4e84-b95e-00eb559b7e63"
+            Owner="i:0#.f|membership|spadmin@testspdomain.onmicrosoft.com" Description=""
+            SourceTermId="ce64f6bc-a317-4e84-b95e-00eb559b7e63">
+            <pnp:Terms />
+          </pnp:Term>
+          <pnp:Term Name="Enterprise Initiatives" ID="2dabc68b-347d-49dc-a64e-ad5c572dd573"
+            Owner="i:0#.f|membership|spadmin@testspdomain.onmicrosoft.com" Description=""
+            SourceTermId="2dabc68b-347d-49dc-a64e-ad5c572dd573">
+            <pnp:Terms />
+          </pnp:Term>
+          <pnp:Term Name="Internal Audit" ID="db6b6c31-94d7-4e23-85f0-482e757766a3"
+            Owner="i:0#.f|membership|spadmin@testspdomain.onmicrosoft.com" Description=""
+            SourceTermId="db6b6c31-94d7-4e23-85f0-482e757766a3">
+            <pnp:Terms />
+          </pnp:Term>
+        </pnp:Terms>
+      </pnp:TermSet>
+    </pnp:TermSets>
+  </pnp:TermGroup>
+</pnp:TermGroups>
