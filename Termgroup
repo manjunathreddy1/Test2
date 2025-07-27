@@ -1,0 +1,33 @@
+# Connect to target tenant
+Connect-PnPOnline -Url "https://<your-tenant>.sharepoint.com/sites/<yoursite>" -Interactive
+Export-PnPTermGroupToXml -Out c:\scripts\output.xml -Identity "AN Test" 
+
+
+Import-PnPTermGroupFromXml -Path c:\scripts\output.xml 
+
+# Get the new term group
+$group = Get-PnPTermGroup -Identity "Your Term Group Name"
+
+# Get the new term set
+$termSet = Get-PnPTermSet -Group $group -Identity "Your Term Set Name"
+
+# Save their IDs
+$termGroupId = $group.Id
+$termSetId = $termSet.Id
+
+
+$termGroup = Get-PnPTermGroup -Identity "AN Test2"
+
+Set-PnPField -List "test" -Identity "TestTermColumn" -Values @{ 
+    SspId = "11fd7b45-d559-4533-98ab-8ce1897c0362"
+    TermSetId = "03aeda29-fb28-4bb4-8f5d-1e029e0f6913"
+    AnchorId = "00000000-0000-0000-0000-000000000000"  # Default (no anchor)
+  }
+
+
+
+Set-PnPField -List $listName -Identity $columnInternalName -Values @{
+    SspId     = "11fd7b45-d559-4533-98ab-8ce1897c0362"
+    TermSetId = "03aeda29-fb28-4bb4-8f5d-1e029e0f6913"
+    AnchorId  = "00000000-0000-0000-0000-000000000000"
+}
