@@ -1,0 +1,4 @@
+XRank
+ "queryTemplate": "({searchTerms} XRANK(cb=50)(RefinableInt00:1))({searchTerms} XRANK(cb=500)(RefinableInt00:4))"
+
+"queryTemplate": "({searchTerms} XRANK(cb=5)(RefinableInt00:4) XRANK(cb=50)(RefinableInt00:1))"
