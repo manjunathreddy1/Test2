@@ -1,0 +1,22 @@
+import { AadHttpClient } from '@microsoft/sp-http';
+
+const client = await this.context.aadHttpClientFactory.getClient("api://<flow-app-id>");
+const response = await client.post(
+  "https://<your-flow-endpoint>.logic.azure.com/workflows/...",
+  AadHttpClient.configurations.v1,
+  {
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: "Test item" })
+  }
+);
+
+const result = await response.json();
+console.log(result);
+
+
+"webApiPermissionRequests": [
+  {
+    "resource": "Your Flow API",
+    "scope": "Flow.Execute"
+  }
+]
