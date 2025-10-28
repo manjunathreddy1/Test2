@@ -1,0 +1,8 @@
+Connect-SPOService -Url "https://testspdomain-admin.sharepoint.com"
+
+Check if your site is a Hub Site
+Add-SPOHubSiteAssociation https://testspdomain.sharepoint.com/sites/child2 -HubSite https://testspdomain.sharepoint.com/sites/Parent1
+
+
+remove hub association
+Remove-SPOHubSiteAssociation https://testspdomain.sharepoint.com/sites/child2
